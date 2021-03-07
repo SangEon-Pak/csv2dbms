@@ -10,7 +10,8 @@ from tkinter import ttk, filedialog, messagebox
 csv_full_path = ""  #/home/shin/project/csv2db장/csv/temp.csv
 db_save_path = ""  #/home/shin/project/csv2db/db
 
-
+###################################################################################
+###################################################################################
 def message(check):
     # if check == 1:
     #     messagebox.showinfo('파일 경로', '파일 경로는 {}입니다'.format(csv_full_path))
@@ -18,33 +19,50 @@ def message(check):
     #     messagebox.showinfo('저장 경로', '저장 경로는 {}입니다'.format(db_save장_path))
 
     # global
-    # aaaa = Tk.StringVar(0);
+    # te = Tk.StringVar(0);
     #
     # aaaa.get()
     # aaaa.set(dsfdfdsdsfddsdsf)
+
+
+    if check == 1 :
+        var1 = StringVar()
+        label1 = Label(root, textvariable = var1)
+        label1.pack(side = LEFT, padx = 10)
+        var1.set("파일위치 : {}".format(csv_full_path))
+
+    if check == 2 :
+        var1 = StringVar()
+        label1 = Label(root, textvariable=var1)
+        label1.pack(side = BOTTOM, padx=10)
+        var1.set("저장위치 : {}".format(db_save_path))
+
+
+
+
+    # if check == 1:
+    #     e = Entry(root, width = 50, fg = 'black', bg = 'yellow')
+    #     e.pack()
+    #     # e['visable'] =
+    #     e.insert(0, "파일 위치: {}".format(csv_full_path))
     #
+    # elif check == 2:
+    #     e = Entry(root, width = 50, fg = 'black', bg = 'green')
+    #     e.pack()
+    #     e.insert(0, "저장 위치: {}".format(db_save_path))
+    #
+    # else:
+    #     e = Entry(root, width = 50, fg = 'white', bg = 'black')
+    #     e.pack()
+    #     e.insert(0, "csv 파일을 선택해주세요! ")
 
-    if check == 1:
-        e = Entry(root, width = 50, fg = 'black', bg = 'yellow')
-        e.pack()
-        # e['visable'] =
-        e.insert(0, "파일 위치: {}".format(csv_full_path))
-
-    elif check == 2:
-        e = Entry(root, width = 50, fg = 'black', bg = 'green')
-        e.pack()
-        e.insert(0, "저장 위치: {}".format(db_save_path))
-
-    else:
-        e = Entry(root, width = 50, fg = 'white', bg = 'black')
-        e.pack()
-        e.insert(0, "csv 파일을 선택해주세요! ")
-
+###################################################################################
+###################################################################################
 
 def askfilepath():
     global csv_full_path
 
-    text_label.set("")
+    # text_label.set("")
 
 
     file = filedialog.askopenfile()
@@ -63,7 +81,8 @@ def askfilepath():
 
 
     # print(csv_full_path)
-
+###################################################################################
+###################################################################################
 def askfolderpath():
     global db_save_path
     db_save_path = filedialog.askdirectory()
@@ -80,16 +99,13 @@ def askfolderpath():
     # # print(TEST)
     # # return db_save_path
 
-
+###################################################################################
+###################################################################################
 def save():
     csv_name = Path(csv_full_path).stem
 
     con = sqlite3.connect("{}/{}.db".format(db_save_path, csv_name))
-    # con = sqlite3.connect("{}/{}.db".format(db_path, csv_name))
-
     cur = con.cursor()
-
-    # f = open(csv_path, 'r', encoding = 'utf-8')
 
     f = open(csv_full_path, 'r', encoding = 'utf-8')
     rdr = csv.reader(f)
@@ -129,13 +145,6 @@ def save():
     label1 = Label(root, text = "적재 성공!")
     label2 = Label(root, text = "적재 실패!")
 
-    # entry
-    # ednd
-    # .s
-    # g
-    #
-
-
     print(db_save_path + "/{}".format(csv_name))
     if os.path.isfile(db_save_path + "/{}.db".format(csv_name)):
         label1.pack()
@@ -143,7 +152,8 @@ def save():
         label2.pack()
 
 
-
+###################################################################################
+###################################################################################
 
 if __name__ == "__main__":
 
@@ -155,36 +165,32 @@ if __name__ == "__main__":
     csv_full_path = ""  #/home/shin/project/csv2db/csv/temp.csv
     db_save_path = ""  #/home/shin/project/csv2db/db
 
-    # B = StringVar()
-    # C = ""
-    # btn1 = Button(root, text = '파일선택', overrelief = "solid", command = lambda: C == askfilepath())
-
-    text_label = StringVar()
 
 
-    # Submit = Button(root, text = "Submit", command = lambda: C==askfilepath()).grid(row = 1, column = 1)
-    label_01 = Label(root, text='test', textvariable=text_label)
-    text_label.set("시작")
-    label_01.pack()
-
+    # text_label = StringVar()
+    #
+    #
+    # # Submit = Button(root, text = "Submit", command = lambda: C==askfilepath()).grid(row = 1, column = 1)
+    # label_01 = Label(root, text='test', textvariable = text_label)
+    # text_label.set("시작")
+    # label_01.pack()
+    #
 
     btn1 = Button(root, text = '파일선택', overrelief = "solid", command = askfilepath, background = "yellow")
-    # btn1.pack(side= "top", expand = "false")
-
-    # btn1.grid(row =1, column = 1)
-    # btn1.place( x = 70, y = 50 )
 
 
     btn2 = Button(root, text = '저장위치선택', overrelief = "solid", command = askfolderpath , background = "green")
 
-
-    # btn2.place (x = 170 , y = 50 )
-    # btn2.grid(row = 1, column = 2)
     btn3 = Button(root, text = '적재하기', overrelief = "solid", command = save, background = "black", fg = "white")
 
     btn3.pack(side = "bottom", fill = "x")
     btn2.pack(side = "bottom", fill = "x")
     btn1.pack(side = "bottom", fill = "x")
+
+    # var1 = StringVar()
+    # label1 = Label(root, textvariable=var1)
+    # label1.pack(side=LEFT, padx=10)
+    # var1.set("Aaa")
 
     # btn1.grid(row = 1, column = 1)
     # btn2.grid(row = 1, column = 2)
