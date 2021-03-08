@@ -49,7 +49,7 @@ def askfilepath():
     if csv_full_path[-3:] == "csv":
         message(1)
 
-    else :
+    else:
         message(3)
 
 
