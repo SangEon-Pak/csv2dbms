@@ -5,7 +5,7 @@ from os.path import abspath
 from pathlib import Path
 from tkinter import *
 from tkinter import ttk, filedialog, messagebox
-
+import timeit
 
 csv_full_path = ""  #/home/shin/project/csv2db장/csv/temp.csv
 db_save_path = ""  #/home/shin/project/csv2db/db
@@ -13,17 +13,6 @@ db_save_path = ""  #/home/shin/project/csv2db/db
 ###################################################################################
 ###################################################################################
 def message(check):
-    # if check == 1:
-    #     messagebox.showinfo('파일 경로', '파일 경로는 {}입니다'.format(csv_full_path))
-    # else:
-    #     messagebox.showinfo('저장 경로', '저장 경로는 {}입니다'.format(db_save장_path))
-
-    # global
-    # te = Tk.StringVar(0);
-    #
-    # aaaa.get()
-    # aaaa.set(dsfdfdsdsfddsdsf)
-
 
     if check == 1 :
         var1 = StringVar()
@@ -37,6 +26,7 @@ def message(check):
         label1.pack(side = BOTTOM, padx=10)
         var1.set("저장위치 : {}".format(db_save_path))
 
+    else:
 
 
 
@@ -102,6 +92,9 @@ def askfolderpath():
 ###################################################################################
 ###################################################################################
 def save():
+    global terminate_time
+    global start_time
+
     csv_name = Path(csv_full_path).stem
 
     con = sqlite3.connect("{}/{}.db".format(db_save_path, csv_name))
@@ -125,6 +118,29 @@ def save():
 
     i = 0
 
+    start_time = timeit.default_timer()
+
+    # for line in datas:
+    #     if i == 0:
+    #         con.execute("drop table if exists {}".format(csv_name))
+    #         con.execute("create table {}({})".format(csv_name, name))
+    #
+    #     else:
+    #         temp1 = "'" + "','".join(line) + "'"
+    #         # print(temp1)
+    #         # 쿼리문 value에 공백 안들어가게. ' '감싸기
+    #
+    #         con.execute("insert into {0}({1}) values ({2})".format(csv_name, temp, temp1))
+    #
+    #     i = i + 1
+    #
+    # con.commit()
+    # con.close()
+    #
+
+
+    con.execute('BEGIN TRANSACTION')
+
     for line in datas:
         if i == 0:
             con.execute("drop table if exists {}".format(csv_name))
@@ -132,20 +148,37 @@ def save():
 
         else:
             temp1 = "'" + "','".join(line) + "'"
-            print(temp1)
+            # print(temp1)
             # 쿼리문 value에 공백 안들어가게. ' '감싸기
 
             con.execute("insert into {0}({1}) values ({2})".format(csv_name, temp, temp1))
 
         i = i + 1
 
+    # con.execute('END TRANSACTION')
+    con.execute('COMMIT TRANSACTION')
+
+
     con.commit()
     con.close()
+
+    terminate_time = timeit.default_timer()
+    print(terminate_time - start_time)
+
 
     label1 = Label(root, text = "적재 성공!")
     label2 = Label(root, text = "적재 실패!")
 
-    print(db_save_path + "/{}".format(csv_name))
+    var1 = StringVar()
+    label3 = Label(root, textvariable = var1)
+    label3.pack(side =  BOTTOM, padx = 10)
+    var1.set("소요시간 : {}".format(terminate_time - start_time))
+
+
+
+
+
+
     if os.path.isfile(db_save_path + "/{}.db".format(csv_name)):
         label1.pack()
     else:
@@ -153,13 +186,20 @@ def save():
 
 
 ###################################################################################
+def printtime():
+    var1.set("소요시간 : {}".format(terminate_time - start_time))
+
+
+
+
+
 ###################################################################################
 
 if __name__ == "__main__":
 
     root = Tk()
     root.title("csv2db")
-    root.geometry("400x450")
+    root.geometry("600x600")
     root.resizable(False, False)
 
     csv_full_path = ""  #/home/shin/project/csv2db/csv/temp.csv
@@ -177,20 +217,18 @@ if __name__ == "__main__":
     #
 
     btn1 = Button(root, text = '파일선택', overrelief = "solid", command = askfilepath, background = "yellow")
-
-
     btn2 = Button(root, text = '저장위치선택', overrelief = "solid", command = askfolderpath , background = "green")
-
     btn3 = Button(root, text = '적재하기', overrelief = "solid", command = save, background = "black", fg = "white")
 
-    btn3.pack(side = "bottom", fill = "x")
+
+    btn3.pack(side = "bottom", fill = "x")     # 버튼 위젯 배치
     btn2.pack(side = "bottom", fill = "x")
     btn1.pack(side = "bottom", fill = "x")
-
+    #
     # var1 = StringVar()
-    # label1 = Label(root, textvariable=var1)
-    # label1.pack(side=LEFT, padx=10)
-    # var1.set("Aaa")
+    # label3 = Label(root, textvariable = var1)
+    # label3.pack(side =  BOTTOM, padx = 10)
+
 
     # btn1.grid(row = 1, column = 1)
     # btn2.grid(row = 1, column = 2)
@@ -200,6 +238,18 @@ if __name__ == "__main__":
     # btn3.grid(row =1, column = 3)
     # btn3.place (x = 270, y = 50 )
 
+    # display_text = StringVar()
+    # display = ttk.Label(root, textvariable = display_text)
+    #
+    #
+    # def add_one():
+    #     s = display_text.get()
+    #     s = terminate_time - start_time
+    #     display_text.set(s)
+    #
+    #
+    # one = Button(root, height = 10, width =10, command = add_one)
+    # one.grid(row=1, column =0)
 
 
     root.mainloop()
