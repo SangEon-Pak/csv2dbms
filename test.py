@@ -7,7 +7,7 @@ from tkinter import *
 from tkinter import ttk, filedialog, messagebox
 import timeit
 
-csv_full_path = ""  #/home/shin/project/csv2db장/csv/temp.csv
+script_full_path = ""  #/home/shin/project/csv2db장/csv/temp.csv
 db_save_path = ""  #/home/shin/project/csv2db/db
 
 ###################################################################################
@@ -19,7 +19,7 @@ def message(check):
 
     if check == 1 :
         print(filelocation)
-        filelocation.set("파일위치 : {}".format(csv_full_path))
+        filelocation.set("파일위치 : {}".format(script_full_path))
         print(filelocation)
         savepath.set("")
 
@@ -41,7 +41,7 @@ def message(check):
 ###################################################################################
 
 def askfilepath():
-    global csv_full_path
+    global script_full_path
 
     file = filedialog.askopenfile()
     csv_full_path = file.name
@@ -77,12 +77,12 @@ def save():
 
 
 
-    csv_name = Path(csv_full_path).stem
+    csv_name = Path(script_full_path).stem
 
     con = sqlite3.connect("{}/{}.db".format(db_save_path, csv_name))
     cur = con.cursor()
 
-    f = open(csv_full_path, 'r', encoding = 'utf-8')
+    f = open(script_full_path, 'r', encoding ='utf-8')
     rdr = csv.reader(f)
 
     datas = list(rdr)
@@ -165,7 +165,7 @@ if __name__ == "__main__":
     root.geometry("600x600")
     root.resizable(False, False)
 
-    csv_full_path = ""  #/home/shin/project/csv2db/csv/temp.csv
+    script_full_path = ""  #/home/shin/project/csv2db/csv/temp.csv
     db_save_path = ""  #/home/shin/project/csv2db/db
 
 
