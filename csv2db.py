@@ -13,14 +13,14 @@ import timeit
 global running_time
 
 def save():
-    csv_name = Path(script_full_path).stem
+    csv_name = Path(csv_full_path).stem
 
     print(db_save_path)
     print(csv_name)
     con = sqlite3.connect("{}/{}.db".format(db_save_path, csv_name))
     cur = con.cursor()
 
-    f = open(script_full_path, 'r', encoding ='utf-8')
+    f = open(csv_full_path, 'r', encoding ='utf-8')
     rdr = csv.reader(f)
 
     datas = list(rdr)
@@ -42,7 +42,7 @@ def save():
     i = 0
 
     start_time = timeit.default_timer()
-    con.execute('BEGIN TRANSACTION')
+    # con.execute('BEGIN TRANSACTION')
 
     for line in datas:
         if i == 0:
@@ -65,29 +65,29 @@ def save():
         #     per.set(percentage)
         #     progressbar.update()
 
-
-        if i % a == 0 or i == brt :
-            percentage = (i/brt)*100
-            print(percentage)
-            per.set(percentage)
-            progressbar.update()
+        #
+        # if i % a == 0 or i == brt :
+        #     percentage = (i/brt)*100
+        #     print(percentage)
+        #     per.set(percentage)
+        #     progressbar.update()
 
 
 
     # con.execute('END TRANSACTION')
-    con.execute('COMMIT TRANSACTION')
+    # con.execute('COMMIT TRANSACTION')
     con.commit()
     con.close()
 
     terminate_time = timeit.default_timer()
     running_time = terminate_time - start_time
 
-    messagebox.showinfo("CSV2DB", "작업 완료! \n소요시간 : {}초 ".format(round(running_time,2)))
+    messagebox.showinfo("CSV2DB", "작업 완료! \n소요시간 : {}초 ".format(round(running_time,3)))
 
 ###################################################################################
 
 def click(m):
-    global script_full_path  # /home/shin/project/csv2db장/csv/temp.csv
+    global csv_full_path  # /home/shin/project/csv2db장/csv/temp.csv
     global db_save_path  # /home/shin/project/csv2db/db
 
     if m == 0:
@@ -113,9 +113,9 @@ if __name__ == "__main__":
     root = tk.Tk()
     root.title("csv2db")
     root.geometry("700x500")
-    root.resizable(False, False)
+    #root.resizable(False, False)
 
-    script_full_path = ""  #/home/shin/project/csv2db/csv/temp.csv
+    csv_full_path = ""  #/home/shin/project/csv2db/csv/temp.csv
     db_save_path = ""  #/home/shin/project/csv2db/db
 
 
@@ -140,10 +140,10 @@ if __name__ == "__main__":
 
     ttk.Button(root, text="변환하기", width=60, command=save).grid(row=5, column=3, padx=5)
     # section = 100
-    per = DoubleVar()
-    progressbar = ttk.Progressbar(root, maximum = 100, length = 150, mode = "determinate", variable = per)
-
-    progressbar.grid(row =30, column = 3, padx= 5)
+    # per = DoubleVar()
+    # progressbar = ttk.Progressbar(root, maximum = 100, length = 150, mode = "determinate", variable = per)
+    #
+    # progressbar.grid(row =30, column = 3, padx= 5)
 
 
 
