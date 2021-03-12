@@ -25,7 +25,7 @@ def save():
 
     cur = con.cursor()
 
-    # cur.executescript(sqlscript)  primary key check
+    cur.executescript(sqlscript)
 
 
     con.commit()
@@ -33,8 +33,7 @@ def save():
 
     terminate_time = timeit.default_timer()
     running_time = terminate_time - start_time
-
-    messagebox.showinfo("CSV2DB", "작업 완료! \n소요시간 : {}초 ".format(round(running_time,2)))
+    messagebox.showinfo("Script2DB", "작업 완료! \n소요시간 : {}초 ".format(round(running_time,3)))
 
 ###################################################################################
 
@@ -63,9 +62,9 @@ if __name__ == "__main__":
 
     # global section
     root = tk.Tk()
-    root.title("csv2db")
+    root.title("Script2DB")
     root.geometry("700x500")
-    root.resizable(False, False)
+    # root.resizable(False, False)
 
     script_full_path = ""  #/home/shin/project/csv2db/csv/temp.csv
     db_save_path = ""  #/home/shin/project/csv2db/db
@@ -91,9 +90,9 @@ if __name__ == "__main__":
 
 
     ttk.Button(root, text="변환하기", width=60, command=save).grid(row=5, column=3, padx=5)
-    per = DoubleVar()
-    progressbar = ttk.Progressbar(root, maximum = 100, length = 150, mode = "determinate", variable = per)
-    progressbar.grid(row =30, column = 3, padx= 5)
+    # per = DoubleVar()
+    # progressbar = ttk.Progressbar(root, maximum = 100, length = 150, mode = "determinate", variable = per)
+    # progressbar.grid(row =30, column = 3, padx= 5)
 
 
 
